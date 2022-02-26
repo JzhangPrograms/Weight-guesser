@@ -1,0 +1,67 @@
+import random
+import re
+from serpapi import GoogleSearch
+
+params = {
+  "api_key": "5c3c9031c0e163ac5817900220dfd531b00ac5ec6103690c0d9d67b39bd4886f",
+  "engine": "google",
+  "google_domain": "google.com"
+}
+
+print('welcome to weight guessers')
+
+
+def searchd():
+    ans = "how much does a x weigh in pounds"
+    b = []
+    weigh = random.choice(range(1,1000))
+    sear = input("I want an object that weighs " + str(weigh) + " pounds ")  
+    params["q"] = (ans.replace("x",sear))
+    search = GoogleSearch(params)
+    results = search.get_dict()
+    answer_box = results['answer_box']
+    b.append(answer_box)
+    firstweigh = re.search(r"\d", str(b)).start()
+    firstpound = str(b).find("pounds")
+    final_weigh = (str(b)[firstweigh:firstpound])
+    def game():
+     game_count = 0
+     if game_count < 5:
+      game_score = 0
+      if weigh != final_weigh:
+        z = ("a " + str(sear) + " is in the range of " + str(final_weigh) + "pounds")
+        print(z)
+        ba = str(z).find("pounds")
+        bb = ((z)[ba-8:ba])
+        bc = re.search(r"\d", str(bb)).start()
+        bd = (str(bb)[bc:ba])
+        be = bd.replace(",","")
+        accuracy = abs(int(float(be)) - int(weigh))
+        game_count += 1
+        if accuracy <= int(weigh)/12:
+            game_score += 4
+            print(str(accuracy) + " pounds of difference")
+            print("Awesome! You earned " + str(game_score) + " points")      
+        elif accuracy <= int(weigh)/8:
+            game_score += 3
+            print(str(accuracy) + " pounds of difference")
+            print("Good! You earned " + str(game_score) + " points")
+        elif accuracy <= int(weigh)/4:
+            game_score += 2
+            print(str(accuracy) + " pounds of difference")
+            print("Okay! You earned " + str(game_score) + " points")
+        elif accuracy <= int(weigh)/2:
+            game_score += 1
+            print(str(accuracy) + " pounds of difference")
+            print("Not bad! You earned " + str(game_score) + " points")
+        elif accuracy >= int(weigh):
+            game_score += 0
+            print(str(accuracy) + " pounds of difference")
+            print("0 points for that guess")          
+     if game_count == 5:
+       print("game over, you're total score was: " + str(game_score) + " points")
+    game()
+    searchd()
+       
+
+searchd()   
